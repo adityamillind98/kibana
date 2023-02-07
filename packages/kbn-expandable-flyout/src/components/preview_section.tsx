@@ -6,7 +6,14 @@
  * Side Public License, v 1.
  */
 
-import { EuiButtonEmpty, EuiButtonIcon, EuiFlexGroup, EuiFlexItem, EuiPanel } from '@elastic/eui';
+import {
+  EuiButtonEmpty,
+  EuiButtonIcon,
+  EuiFlexGroup,
+  EuiFlexItem,
+  EuiPanel,
+  useEuiTheme,
+} from '@elastic/eui';
 import React from 'react';
 import { css } from '@emotion/react';
 import {
@@ -15,7 +22,7 @@ import {
   PREVIEW_SECTION_CLOSE_BUTTON,
 } from './test_ids';
 import { useExpandableFlyoutContext } from '../..';
-import { BACK_BUTTON } from './translations';
+import { BACK_BUTTON, CLOSE_BUTTON } from './translations';
 
 interface PreviewSectionProps {
   /**
@@ -41,6 +48,7 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({
   showBackButton,
   width,
 }: PreviewSectionProps) => {
+  const { euiTheme } = useEuiTheme();
   const { closePreviewPanel, previousPreviewPanel } = useExpandableFlyoutContext();
 
   const previewWith: string = width ? `${width}px` : '0px';
@@ -51,6 +59,7 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({
         iconType="cross"
         onClick={() => closePreviewPanel()}
         data-test-subj={PREVIEW_SECTION_CLOSE_BUTTON}
+        aria-label={CLOSE_BUTTON}
       />
     </EuiFlexItem>
   );
@@ -63,6 +72,7 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({
           iconSide="left"
           onClick={() => previousPreviewPanel()}
           data-test-subj={PREVIEW_SECTION_BACK_BUTTON}
+          aria-label={BACK_BUTTON}
         >
           {BACK_BUTTON}
         </EuiButtonEmpty>
@@ -82,7 +92,7 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({
           bottom: 0;
           right: 0;
           left: ${previewWith};
-          background-color: #242934;
+          background-color: ${euiTheme.colors.shadow};
           opacity: 0.5;
         `}
       />
@@ -98,7 +108,7 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({
       >
         <EuiPanel
           css={css`
-            margin: 8px;
+            margin: ${euiTheme.size.xs};
             height: 100%;
           `}
           data-test-subj={PREVIEW_SECTION}

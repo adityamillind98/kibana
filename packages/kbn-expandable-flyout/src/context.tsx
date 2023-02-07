@@ -6,29 +6,17 @@
  * Side Public License, v 1.
  */
 
-import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
-import { noop } from 'lodash/fp';
-import type { FlyoutLayout } from '../models/layout';
-import type { FlyoutPanel } from '../models/panel';
-import { FlyoutState, initialFlyoutState } from '../models/state';
-import {
-  closeFlyout,
-  closeFlyoutLeftPanel,
-  closeFlyoutPreviewPanel,
-  closeFlyoutRightPanel,
-  openFlyout,
-  openFlyoutLeftPanel,
-  openFlyoutPreviewPanel,
-  openFlyoutRightPanel,
-  previousFlyoutPreviewPanel,
-  selectFlyoutLayout,
-} from '../utils/helpers';
+import React, { createContext, useCallback, useContext, useMemo, useReducer } from 'react';
+import { ActionType } from './actions';
+import { reducer, State } from './reducer';
+import type { FlyoutPanel } from './types';
+import { initialState } from './reducer';
 
 export interface ExpandableFlyoutContext {
   /**
    * Right, left and preview panels
    */
-  panels: FlyoutLayout;
+  panels: State;
   /**
    * Open the flyout with left, right and/or preview panels
    */
@@ -67,22 +55,9 @@ export interface ExpandableFlyoutContext {
   closeFlyout: () => void;
 }
 
-export const ExpandableFlyoutContext = createContext<ExpandableFlyoutContext>({
-  panels: {
-    left: {},
-    right: {},
-    preview: [],
-  },
-  openFlyout: noop,
-  openRightPanel: noop,
-  openLeftPanel: noop,
-  openPreviewPanel: noop,
-  closeRightPanel: noop,
-  closeLeftPanel: noop,
-  closePreviewPanel: noop,
-  closeFlyout: noop,
-  previousPreviewPanel: noop,
-});
+export const ExpandableFlyoutContext = createContext<ExpandableFlyoutContext | undefined>(
+  undefined
+);
 
 export interface ExpandableFlyoutProviderProps {
   /**
@@ -95,7 +70,7 @@ export interface ExpandableFlyoutProviderProps {
  * Wrap your plugin with this context for the ExpandableFlyout React component.
  */
 export const ExpandableFlyoutProvider = ({ children }: ExpandableFlyoutProviderProps) => {
-  const [state, setState] = useState<FlyoutState>(initialFlyoutState);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const openPanels = useCallback(
     ({
@@ -106,41 +81,50 @@ export const ExpandableFlyoutProvider = ({ children }: ExpandableFlyoutProviderP
       right?: FlyoutPanel;
       left?: FlyoutPanel;
       preview?: FlyoutPanel;
-    }) => setState(openFlyout(state, { left, right, preview })),
-    [state]
+    }) => dispatch({ type: ActionType.openFlyout, payload: { left, right, preview } }),
+    [dispatch]
   );
 
   const openRightPanel = useCallback(
-    (panel: FlyoutPanel) => setState(openFlyoutRightPanel(state, panel)),
-    [state]
+    (panel: FlyoutPanel) => dispatch({ type: ActionType.openRightPanel, payload: panel }),
+    [dispatch]
   );
 
   const openLeftPanel = useCallback(
-    (panel: FlyoutPanel) => setState(openFlyoutLeftPanel(state, panel)),
-    [state]
+    (panel: FlyoutPanel) => dispatch({ type: ActionType.openLeftPanel, payload: panel }),
+    [dispatch]
   );
 
   const openPreviewPanel = useCallback(
-    (panel: FlyoutPanel) => setState(openFlyoutPreviewPanel(state, panel)),
-    [state]
+    (panel: FlyoutPanel) => dispatch({ type: ActionType.openPreviewPanel, payload: panel }),
+    [dispatch]
   );
 
-  const closeRightPanel = useCallback(() => setState(closeFlyoutRightPanel(state)), [state]);
+  const closeRightPanel = useCallback(
+    () => dispatch({ type: ActionType.closeRightPanel }),
+    [dispatch]
+  );
 
-  const closeLeftPanel = useCallback(() => setState(closeFlyoutLeftPanel(state)), [state]);
+  const closeLeftPanel = useCallback(
+    () => dispatch({ type: ActionType.closeLeftPanel }),
+    [dispatch]
+  );
 
-  const closePreviewPanel = useCallback(() => setState(closeFlyoutPreviewPanel(state)), [state]);
+  const closePreviewPanel = useCallback(
+    () => dispatch({ type: ActionType.closePreviewPanel }),
+    [dispatch]
+  );
 
   const previousPreviewPanel = useCallback(
-    () => setState(previousFlyoutPreviewPanel(state)),
-    [state]
+    () => dispatch({ type: ActionType.previousPreviewPanel }),
+    [dispatch]
   );
 
-  const closePanels = useCallback(() => setState(closeFlyout()), []);
+  const closePanels = useCallback(() => dispatch({ type: ActionType.closeFlyout }), [dispatch]);
 
   const contextValue = useMemo(
     () => ({
-      panels: selectFlyoutLayout(state),
+      panels: state,
       openFlyout: openPanels,
       openRightPanel,
       openLeftPanel,
@@ -175,5 +159,14 @@ export const ExpandableFlyoutProvider = ({ children }: ExpandableFlyoutProviderP
 /**
  * Retrieve context's properties
  */
-export const useExpandableFlyoutContext = () =>
-  useContext<NonNullable<ExpandableFlyoutContext>>(ExpandableFlyoutContext);
+export const useExpandableFlyoutContext = (): ExpandableFlyoutContext => {
+  const contextValue = useContext(ExpandableFlyoutContext);
+
+  if (!contextValue) {
+    throw new Error(
+      'ExpandableFlyoutContext can only be used within ExpandableFlyoutContext provider'
+    );
+  }
+
+  return contextValue;
+};

@@ -6,9 +6,8 @@
  * Side Public License, v 1.
  */
 
-export { ExpandableFlyout } from './src/components';
-export { ExpandableFlyoutProvider, useExpandableFlyoutContext } from './src/components/context';
+export { ExpandableFlyout } from './src';
+export { ExpandableFlyoutProvider, useExpandableFlyoutContext } from './src/context';
 
-export type { ExpandableFlyoutProps } from './src/components';
-export type { FlyoutPanel } from './src/models/panel';
-export type { FlyoutLayout } from './src/models/layout';
+export type { ExpandableFlyoutProps } from './src';
+export type { FlyoutPanel } from './src/types';

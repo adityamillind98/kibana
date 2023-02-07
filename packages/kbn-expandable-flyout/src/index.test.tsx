@@ -8,12 +8,21 @@
 
 import React from 'react';
 import { render } from '@testing-library/react';
-import { Panel } from '../models/panel';
-import { ExpandableFlyout } from '../..';
-import { LEFT_SECTION, PREVIEW_SECTION, RIGHT_SECTION } from './test_ids';
+import { Panel } from './types';
+import { ExpandableFlyout } from '.';
+import { LEFT_SECTION, PREVIEW_SECTION, RIGHT_SECTION } from './components/test_ids';
 import { ExpandableFlyoutContext } from './context';
 
 describe('ExpandableFlyout', () => {
+  const registeredPanels: Panel[] = [
+    {
+      key: 'key',
+      width: 500,
+      component: () => <div>{'component'}</div>,
+    },
+  ];
+  const onClose = () => window.alert('closed');
+
   it('should render right section', () => {
     const context: ExpandableFlyoutContext = {
       panels: {
@@ -24,14 +33,6 @@ describe('ExpandableFlyout', () => {
         preview: [],
       },
     } as unknown as ExpandableFlyoutContext;
-    const registeredPanels: Panel[] = [
-      {
-        key: 'key',
-        width: 500,
-        component: () => <div>{'component'}</div>,
-      },
-    ];
-    const onClose = () => window.alert('closed');
 
     const { getByTestId } = render(
       <ExpandableFlyoutContext.Provider value={context}>
@@ -52,14 +53,6 @@ describe('ExpandableFlyout', () => {
         preview: [],
       },
     } as unknown as ExpandableFlyoutContext;
-    const registeredPanels: Panel[] = [
-      {
-        key: 'key',
-        width: 500,
-        component: () => <div>{'component'}</div>,
-      },
-    ];
-    const onClose = () => window.alert('closed');
 
     const { getByTestId } = render(
       <ExpandableFlyoutContext.Provider value={context}>
@@ -82,14 +75,6 @@ describe('ExpandableFlyout', () => {
         ],
       },
     } as unknown as ExpandableFlyoutContext;
-    const registeredPanels: Panel[] = [
-      {
-        key: 'key',
-        width: 500,
-        component: () => <div>{'component'}</div>,
-      },
-    ];
-    const onClose = () => window.alert('closed');
 
     const { getByTestId } = render(
       <ExpandableFlyoutContext.Provider value={context}>

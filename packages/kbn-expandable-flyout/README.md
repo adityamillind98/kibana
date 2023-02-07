@@ -25,7 +25,8 @@ The ExpandableFlyout [React context](https://github.com/elastic/kibana/tree/main
 - **closeFlyoutPreviewPanel**: close the preview panels
 - **previousFlyoutPreviewPanel**: navigate to the previous preview panel
 - **closeFlyout**: close the flyout
-- **selectFlyoutLayout**: retrieve the panels, nicely formatted as a usable [layout](https://github.com/elastic/kibana/tree/main/packages/kbn-expandable-flyout/src/models/layout). 
+
+To retrieve the flyout's layout (left, right and preview panels), you can use the **panels** from the same [React context](https://github.com/elastic/kibana/tree/main/packages/kbn-expandable-flyout/src/components/context);
 
 - To have more details about how these above api work, see the code documentation [here](https://github.com/elastic/kibana/tree/main/packages/kbn-expandable-flyout/src/utils/helpers).
 

@@ -11,8 +11,7 @@ import { EuiThemeProvider, useEuiTheme } from '@elastic/eui';
 import { IS_DRAGGING_CLASS_NAME } from '@kbn/securitysolution-t-grid';
 import { KibanaPageTemplate } from '@kbn/shared-ux-page-kibana-template';
 import type { KibanaPageTemplateProps } from '@kbn/shared-ux-page-kibana-template';
-import { ExpandableFlyoutProvider } from '@kbn/expandable-flyout/src/components/context';
-import { ExpandableFlyout } from '@kbn/expandable-flyout';
+import { ExpandableFlyout, ExpandableFlyoutProvider } from '@kbn/expandable-flyout';
 // eslint-disable-next-line @kbn/imports/no_boundary_crossing
 import { expandableFlyoutPanels } from '../../../flyout/test/panels';
 import { useSecuritySolutionNavigation } from '../../../common/components/navigation/use_security_solution_navigation';

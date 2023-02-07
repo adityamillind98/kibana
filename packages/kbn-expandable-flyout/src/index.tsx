@@ -11,10 +11,10 @@ import { css } from '@emotion/react';
 import type { EuiFlyoutProps } from '@elastic/eui';
 import { EuiFlexGroup, EuiFlyout } from '@elastic/eui';
 import { useExpandableFlyoutContext } from './context';
-import { PreviewSection } from './preview_section';
-import { RightSection } from './right_section';
-import type { FlyoutPanel, Panel } from '../models/panel';
-import { LeftSection } from './left_section';
+import { PreviewSection } from './components/preview_section';
+import { RightSection } from './components/right_section';
+import type { FlyoutPanel, Panel } from './types';
+import { LeftSection } from './components/left_section';
 
 export interface ExpandableFlyoutProps extends EuiFlyoutProps {
   /**

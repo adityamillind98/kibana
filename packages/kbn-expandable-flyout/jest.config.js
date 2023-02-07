@@ -10,5 +10,4 @@ module.exports = {
   preset: '@kbn/test',
   rootDir: '../..',
   roots: ['<rootDir>/packages/kbn-expandable-flyout'],
-  setupFilesAfterEnv: ['<rootDir>/packages/kbn-expandable-flyout/setup_test.ts'],
 };
